@@ -1,0 +1,10 @@
+package StudyJDBC.springjdbc.repository;
+
+import java.util.List;
+import StudyJDBC.springjdbc.domain.Member;
+
+public interface MemberRepository {
+    List<Member> findAll();
+    Member findById(int id);
+    void insert(Member member);
+}
