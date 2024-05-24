@@ -47,7 +47,7 @@ public class ArticleController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> updateArticle(
             @PathVariable Long id
     ) {
