@@ -1,7 +1,7 @@
 package StudyJDBC.springjdbc.domain;
 
 public class Member {
-    private int id;
+    private Long id;
     private String name;
     private String email;
     private String password;
@@ -12,11 +12,11 @@ public class Member {
         this.password = password;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

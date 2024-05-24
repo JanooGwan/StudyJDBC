@@ -6,15 +6,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Article {
-    private int id;
-    private int writerId;
-    private int boardId;
+    private Long id;
+    private Long writerId;
+    private Long boardId;
     private String title;
     private String description;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public Article(int writerId, int boardId, String title, String description, LocalDateTime createdDate)
+    public Article(Long writerId, Long boardId, String title, String description, LocalDateTime createdDate)
     {
         this.writerId = writerId;
         this.boardId = boardId;
@@ -23,14 +23,14 @@ public class Article {
         this.createdDate = createdDate;
     }
 
-    public void update(int boardId, String title, String description) {
+    public void update(Long boardId, String title, String description) {
         this.boardId = boardId;
         this.title = title;
         this.description = description;
         this.modifiedDate = LocalDateTime.now();
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -38,15 +38,15 @@ public class Article {
         this.modifiedDate = modifiedDate;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public int getWriterId() {
+    public Long getWriterId() {
         return writerId;
     }
 
-    public int getBoardId() {
+    public Long getBoardId() {
         return boardId;
     }
 
