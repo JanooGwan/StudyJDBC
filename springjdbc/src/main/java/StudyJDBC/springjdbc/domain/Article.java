@@ -23,6 +23,9 @@ public class Article {
         this.createdDate = createdDate;
     }
 
+    public Article() {
+    }
+
     public void update(Long boardId, String title, String description) {
         this.boardId = boardId;
         this.title = title;
@@ -54,8 +57,16 @@ public class Article {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description=description;
     }
 
     public LocalDateTime getCreatedDate() {

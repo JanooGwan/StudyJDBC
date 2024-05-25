@@ -1,40 +1,50 @@
 package StudyJDBC.springjdbc.repository;
 
-import java.util.HashMap;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import StudyJDBC.springjdbc.domain.Board;
 
 @Repository
 public class BoardRepositoryMemory implements BoardRepository {
-    private static final Map<Long, Board> boards = new HashMap<>();
-    private static final AtomicLong autoincrement = new AtomicLong(1);
+    private final JdbcTemplate jdbcTemplate;
 
-    static {
-        boards.put(autoincrement.getAndIncrement(), new Board("자유게시판"));
+    @Autowired
+    public BoardRepositoryMemory(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public List<Board> findAll() {
-        return boards.entrySet().stream()
-                .map(it -> {
-                    Board board = it.getValue();
-                    board.setId(it.getKey());
-                    return board;
-                }).toList();
+        String sql = "SELECT * FROM boards";
+        return jdbcTemplate.query(sql, new BoardRowMapper());
     }
 
     @Override
     public Board findById(Long id) {
-        return boards.getOrDefault(id, null);
+        String sql = "SELECT * FROM boards WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new BoardRowMapper(), id);
     }
 
-    @Override
-    public void insert(Board board) {
-        boards.put(autoincrement.getAndIncrement(), board);
+
+
+    public void save(Board board) {
+        String sql = "INSERT INTO boards (name) VALUES (?, ?)";
+        jdbcTemplate.update(sql, board.getName());
+    }
+
+    private static class BoardRowMapper implements RowMapper<Board> {
+        @Override public Board mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Board board = new Board();
+            board.setId(rs.getLong("id"));
+            board.setName(rs.getString("name"));
+            return board;
+        }
     }
 }

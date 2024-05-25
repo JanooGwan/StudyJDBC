@@ -6,5 +6,4 @@ import StudyJDBC.springjdbc.domain.Board;
 public interface BoardRepository {
     List<Board> findAll();
     Board findById(Long id);
-    void insert(Board board);
 }

@@ -8,6 +8,8 @@ public class Board {
         this.name = name;
     }
 
+    public Board() {};
+
     public Long getId() {
         return id;
     }
@@ -19,4 +21,6 @@ public class Board {
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {this.name=name;}
 }

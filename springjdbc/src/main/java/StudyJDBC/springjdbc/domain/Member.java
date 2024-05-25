@@ -12,6 +12,8 @@ public class Member {
         this.password = password;
     }
 
+    public Member() {}
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -20,13 +22,19 @@ public class Member {
         return id;
     }
 
+    public void setName() { this.name = name; }
+
     public String getName() {
         return name;
     }
 
+    public void setEmail(String email) { this.email = email; }
+
     public String getEmail() {
         return email;
     }
+
+    public void setPassword(String password) { this.password=password;}
 
     public String getPassword() {
         return password;
