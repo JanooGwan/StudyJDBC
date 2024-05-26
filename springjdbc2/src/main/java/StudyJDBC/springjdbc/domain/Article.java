@@ -10,29 +10,18 @@ public class Article {
     private Long writerId;
     private Long boardId;
     private String title;
-    private String content;
+    private String description;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
-    public Article(Long writerId, Long boardId, String title, String content, LocalDateTime createdDate)
+    public Article(Long writerId, Long boardId, String title, String description, LocalDateTime createdDate)
     {
         this.writerId = writerId;
         this.boardId = boardId;
         this.title = title;
-        this.content = content;
+        this.description = description;
         this.createdDate = createdDate;
     }
-
-    public Article(Long id, Long writerId, Long boardId, String title, String content, LocalDateTime createdDate)
-    {
-        this.id = id;
-        this.writerId = writerId;
-        this.boardId = boardId;
-        this.title = title;
-        this.content = content;
-        this.createdDate = createdDate;
-    }
-
 
     public Article() {
     }
@@ -40,7 +29,7 @@ public class Article {
     public void update(Long boardId, String title, String description) {
         this.boardId = boardId;
         this.title = title;
-        this.content = content;
+        this.description = description;
         this.modifiedDate = LocalDateTime.now();
     }
 
@@ -72,12 +61,12 @@ public class Article {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String description) {
-        this.content=description;
+    public void setDescription(String description) {
+        this.description=description;
     }
 
     public LocalDateTime getCreatedDate() {

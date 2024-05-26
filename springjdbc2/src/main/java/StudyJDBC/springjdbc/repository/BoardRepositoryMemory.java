@@ -15,11 +15,6 @@ import StudyJDBC.springjdbc.domain.Board;
 public class BoardRepositoryMemory implements BoardRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    private final RowMapper<Board> boardRowMapper = (rs, rowNum) -> new Board(
-            rs.getLong("id"),
-            rs.getString("name")
-    );
-
     @Autowired
     public BoardRepositoryMemory(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -27,20 +22,29 @@ public class BoardRepositoryMemory implements BoardRepository {
 
     @Override
     public List<Board> findAll() {
-        String sql = "SELECT * FROM board";
-        return jdbcTemplate.query(sql, boardRowMapper);
+        String sql = "SELECT * FROM boards";
+        return jdbcTemplate.query(sql, new BoardRowMapper());
     }
 
     @Override
     public Board findById(Long id) {
-        String sql = "SELECT * FROM board WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, boardRowMapper, id);
+        String sql = "SELECT * FROM boards WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new BoardRowMapper(), id);
     }
+
 
 
     public void save(Board board) {
-        String sql = "INSERT INTO board (name) VALUES (?, ?)";
+        String sql = "INSERT INTO boards (name) VALUES (?, ?)";
         jdbcTemplate.update(sql, board.getName());
     }
 
+    private static class BoardRowMapper implements RowMapper<Board> {
+        @Override public Board mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Board board = new Board();
+            board.setId(rs.getLong("id"));
+            board.setName(rs.getString("name"));
+            return board;
+        }
+    }
 }

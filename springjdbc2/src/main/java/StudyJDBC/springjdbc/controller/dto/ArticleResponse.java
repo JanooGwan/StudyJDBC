@@ -11,7 +11,7 @@ public record ArticleResponse(Long id, String title, String content, String boar
         return new ArticleResponse(
                 article.getId(),
                 article.getTitle(),
-                article.getContent(),
+                article.getDescription(),
                 board.getName(),
                 member.getName(),
                 article.getCreatedDate()

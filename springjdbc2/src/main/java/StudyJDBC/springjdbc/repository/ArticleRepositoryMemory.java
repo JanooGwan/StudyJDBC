@@ -1,13 +1,14 @@
 package StudyJDBC.springjdbc.repository;
 
 import StudyJDBC.springjdbc.domain.Article;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 /*
 @Repository
@@ -58,31 +59,21 @@ public class ArticleRepositoryMemory implements ArticleRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final RowMapper<Article> articleRowMapper = (rs, rowNum) -> new Article(
-            rs.getLong("id"),
-            rs.getLong("author_id"),
-            rs.getLong("board_id"),
-            rs.getString("title"),
-            rs.getString("content"),
-            rs.getObject("created_date", LocalDateTime.class)
-    );
-
+    @Autowired
     public ArticleRepositoryMemory(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Article findById(Long id){return findById(id);}
-
     @Override
     public List<Article> findAll() {
-        String sql = "SELECT * FROM article";
-        return jdbcTemplate.query(sql, articleRowMapper);
+        String sql = "SELECT * FROM articles";
+        return jdbcTemplate.query(sql, new ArticleRowMapper());
     }
 
     @Override
-    public Optional<Article> findByIdOp(Long id) {
-        List<Article> results = jdbcTemplate.query("SELECT * FROM article WHERE id = ?", articleRowMapper, id);
-        return results.stream().findAny();
+    public Article findById(Long id) {
+        String sql = "SELECT * FROM articles WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new ArticleRowMapper(), id);
     }
 
 
@@ -92,27 +83,31 @@ public class ArticleRepositoryMemory implements ArticleRepository {
     }
 
 
-    public Article save(Article article) {
-        jdbcTemplate.update("INSERT INTO article (title, content) VALUES (?, ?)",
-                article.getTitle(), article.getContent());
-        return article;
+    public void save(Article article) {
+        String sql = "INSERT INTO articles (title, content) VALUES (?, ?)";
+        jdbcTemplate.update(sql, article.getTitle(), article.getDescription());
     }
 
 
     public void update(Article article) {
-        String sql = "UPDATE article SET title = ?, content = ? WHERE id = ?";
-        jdbcTemplate.update(sql, article.getTitle(), article.getContent(), article.getId());
+        String sql = "UPDATE articles SET title = ?, content = ? WHERE id = ?";
+        jdbcTemplate.update(sql, article.getTitle(), article.getDescription(), article.getId());
     }
 
     @Override
     public void deleteById(Long id) {
-        String sql = "DELETE FROM article WHERE id = ?";
+        String sql = "DELETE FROM articles WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
 
-    @Override
-    public Article insert(Article article) {
-        return null;
+    private static class ArticleRowMapper implements RowMapper<Article> {
+        @Override
+        public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Article article = new Article();
+            article.setId(rs.getLong("id"));
+            article.setTitle(rs.getString("title"));
+            article.setDescription(rs.getString("description"));
+            return article;
+        }
     }
-
 }

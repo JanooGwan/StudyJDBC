@@ -2,7 +2,10 @@ package StudyJDBC.springjdbc.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,13 +18,6 @@ public class MemberRepositoryMemory implements MemberRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final RowMapper<Member> memberRowMapper = (rs, rowNum) -> new Member(
-            rs.getLong("id"),
-            rs.getString("name"),
-            rs.getString("email"),
-            rs.getString("password")
-    );
-
     @Autowired
     public MemberRepositoryMemory(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -29,16 +25,25 @@ public class MemberRepositoryMemory implements MemberRepository {
 
     @Override
     public List<Member> findAll() {
-        String sql = "SELECT * FROM member";
-        return jdbcTemplate.query(sql, memberRowMapper);
+        String sql = "SELECT * FROM members";
+        return jdbcTemplate.query(sql, new MemberRowMapper());
     }
 
     @Override
     public Member findById(Long id) {
-        String sql = "SELECT * FROM member WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, memberRowMapper, id);
+        String sql = "SELECT * FROM articles WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new MemberRowMapper(), id);
     }
 
 
-
+    public static class MemberRowMapper implements RowMapper<Member> {
+        @Override
+        public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Member member = new Member();
+            member.setId(rs.getLong("id"));
+            member.setEmail(rs.getString("email"));
+            member.setPassword(rs.getString("password"));
+            return member;
+        }
+    }
 }
