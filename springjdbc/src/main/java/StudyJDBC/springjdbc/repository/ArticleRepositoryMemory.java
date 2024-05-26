@@ -1,8 +1,6 @@
 package StudyJDBC.springjdbc.repository;
 
 import StudyJDBC.springjdbc.domain.Article;
-import StudyJDBC.springjdbc.domain.Board;
-import StudyJDBC.springjdbc.domain.Member;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
