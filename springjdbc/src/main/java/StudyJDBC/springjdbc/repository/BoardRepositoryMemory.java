@@ -45,8 +45,5 @@ public class BoardRepositoryMemory implements BoardRepository {
     }
 
 
-    public void insert(Board board) {
-        boards.put(autoincrement.getAndIncrement(), board);
-    }
 
 }

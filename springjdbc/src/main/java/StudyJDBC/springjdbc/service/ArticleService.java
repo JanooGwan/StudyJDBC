@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import StudyJDBC.springjdbc.controller.dto.*;
 import StudyJDBC.springjdbc.domain.*;
 import StudyJDBC.springjdbc.repository.*;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ArticleService {
@@ -56,6 +57,7 @@ public class ArticleService {
                 }).toList();
     }
 
+    @Transactional
     public ArticleResponse create(ArticleCreateRequest request) {
         // System.out.println(request.writerId());
         Article article = new Article(
@@ -72,6 +74,7 @@ public class ArticleService {
         return ArticleResponse.of(article, member, board);
     }
 
+    @Transactional
     public ArticleResponse update(Long id, ArticleUpdateRequest request) {
         Article article = articleRepository.findById(id);
         article.setModifiedDate(LocalDateTime.now());
@@ -82,6 +85,7 @@ public class ArticleService {
         return ArticleResponse.of(article, member, board);
     }
 
+    @Transactional
     public void delete(Long id) {
         articleRepository.deleteById(id);
     }

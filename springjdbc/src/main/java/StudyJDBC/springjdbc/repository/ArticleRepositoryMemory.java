@@ -6,6 +6,7 @@ import StudyJDBC.springjdbc.domain.Member;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -64,6 +65,7 @@ public class ArticleRepositoryMemory implements ArticleRepository {
         return results.stream().findAny();
     }
 
+    @Transactional
     @Override
     public Article update(Long id, Article article) {
         String sql = "UPDATE article SET board_id = ?, title = ?, content = ? WHERE id = ?";
@@ -72,7 +74,7 @@ public class ArticleRepositoryMemory implements ArticleRepository {
         return article;
     }
 
-
+    @Transactional
     public Article insert(Article article) {
         jdbcTemplate.update("INSERT INTO article (author_id, board_id, title, content) VALUES (?, ?, ?, ?)",
                 article.getWriterId(), article.getBoardId(), article.getTitle(), article.getContent());
@@ -80,7 +82,7 @@ public class ArticleRepositoryMemory implements ArticleRepository {
     }
 
 
-
+    @Transactional
     @Override
     public void deleteById(Long id) {
         String sql = "DELETE FROM article WHERE id = ?";
