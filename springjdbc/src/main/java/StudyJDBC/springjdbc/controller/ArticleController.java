@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import StudyJDBC.springjdbc.controller.dto.*;
@@ -18,12 +19,19 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
+    /*
     @GetMapping
     public ResponseEntity<List<ArticleResponse>> getArticles() {
         List<ArticleResponse> response = articleService.getAll();
         return ResponseEntity.ok(response);
     }
+     */
 
+    @GetMapping
+    public ResponseEntity getPostsInBoard(@RequestParam(name="boardId", required=false, defaultValue="4") long boardId, Model model) {
+        List<ArticleResponse> articles = articleService.getBoard(boardId);
+        return ResponseEntity.ok(articles);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long id) {
         ArticleResponse response = articleService.getById(id);
