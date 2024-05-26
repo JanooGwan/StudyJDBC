@@ -8,6 +8,8 @@ public interface ArticleRepository {
     List<Article> findAll();
     Article findById(Long id);
     Optional<Article> findByIdOp(Long id);
+    List<Article> findBoard(Long id);
+    Optional<Article> findByBoardIdOp(Long id);
     Article update(Long id, Article article);
     void deleteById(Long id);
 

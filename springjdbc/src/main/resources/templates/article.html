@@ -6,7 +6,6 @@
 </head>
 <body>
 <div class="container">
-    <div class="board" th:text="${boardName}"></div>
     <div class="post" th:each="post : ${posts}">
         <h2 class="post-title" th:text="${post.title}">제목</h2>
         <div class="post-metadata">
