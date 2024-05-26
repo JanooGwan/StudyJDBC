@@ -33,9 +33,9 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long id) {
-        ArticleResponse response = articleService.getById(id);
-        return ResponseEntity.ok(response);
+    public ResponseEntity getArticle(@PathVariable Long id) {
+        List<ArticleResponse> article = articleService.getById(id);
+        return ResponseEntity.ok(article);
     }
 
     @PostMapping

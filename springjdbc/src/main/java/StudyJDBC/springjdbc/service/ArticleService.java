@@ -46,11 +46,14 @@ public class ArticleService {
                 }).toList();
     }
 
-    public ArticleResponse getById(Long id) {
-        Article article = articleRepository.findById(id);
-        Member member = memberRepository.findById(article.getWriterId());
-        Board board = boardRepository.findById(article.getBoardId());
-        return ArticleResponse.of(article, member, board);
+    public List<ArticleResponse> getById(Long id) {
+        Optional<Article> articles = articleRepository.findByIdOp(id);
+        return articles.stream()
+                .map(article -> {
+                    Member member = memberRepository.findById(article.getWriterId());
+                    Board board = boardRepository.findById(article.getBoardId());
+                    return ArticleResponse.of(article, member, board);
+                }).toList();
     }
 
     public ArticleResponse create(ArticleCreateRequest request) {
@@ -61,10 +64,11 @@ public class ArticleService {
                 request.description(),
                 LocalDateTime.now()
         );
+
         Article saved = articleRepository.insert(article);
         Member member = memberRepository.findById(saved.getWriterId());
         Board board = boardRepository.findById(article.getBoardId());
-        return ArticleResponse.of(article, member, board);
+        return ArticleResponse.of(saved, member, board);
     }
 
     public ArticleResponse update(Long id, ArticleUpdateRequest request) {

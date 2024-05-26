@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import StudyJDBC.springjdbc.domain.Article;
+import StudyJDBC.springjdbc.domain.Board;
+import StudyJDBC.springjdbc.domain.Member;
+
 public interface ArticleRepository {
     List<Article> findAll();
     Article findById(Long id);

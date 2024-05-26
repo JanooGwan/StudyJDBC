@@ -1,6 +1,8 @@
 package StudyJDBC.springjdbc.repository;
 
 import StudyJDBC.springjdbc.domain.Article;
+import StudyJDBC.springjdbc.domain.Board;
+import StudyJDBC.springjdbc.domain.Member;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -61,9 +63,10 @@ public class ArticleRepositoryMemory implements ArticleRepository {
     }
 
 
-    public Article save(Article article) {
-        jdbcTemplate.update("INSERT INTO article (title, content) VALUES (?, ?)",
-                article.getTitle(), article.getContent());
+    public Article insert(Article article) {
+        jdbcTemplate.update("INSERT INTO article (author_id, board_id, title, content) VALUES (?, ?, ?, ?)",
+                article.getWriterId(), article.getBoardId(), article.getTitle(), article.getContent());
+        System.out.println(article.getWriterId());
         return article;
     }
 
@@ -79,9 +82,5 @@ public class ArticleRepositoryMemory implements ArticleRepository {
         jdbcTemplate.update(sql, id);
     }
 
-    @Override
-    public Article insert(Article article) {
-        return null;
-    }
 
 }
