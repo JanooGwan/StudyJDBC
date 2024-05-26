@@ -19,16 +19,9 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    /*
-    @GetMapping
-    public ResponseEntity<List<ArticleResponse>> getArticles() {
-        List<ArticleResponse> response = articleService.getAll();
-        return ResponseEntity.ok(response);
-    }
-     */
 
     @GetMapping
-    public ResponseEntity getPostsInBoard(@RequestParam(name="boardId", required=false, defaultValue="4") long boardId, Model model) {
+    public ResponseEntity getPostsInBoard(@RequestParam(name="boardId", required=false, defaultValue="4") long boardId) {
         List<ArticleResponse> articles = articleService.getBoard(boardId);
         return ResponseEntity.ok(articles);
     }
@@ -39,14 +32,17 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createArticle(
+    @ResponseBody
+    public ResponseEntity<ArticleResponse> createArticle(
             @RequestBody ArticleCreateRequest request
     ) {
+        // System.out.println(request);
         ArticleResponse response = articleService.create(request);
-        return ResponseEntity.created(URI.create("/articles/" +response.id())).build();
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
+    @ResponseBody
     public ResponseEntity<ArticleResponse> updateArticle(
             @PathVariable Long id,
             @RequestBody ArticleUpdateRequest request
@@ -56,7 +52,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> updateArticle(
+    public ResponseEntity<Void> deleteArticle(
             @PathVariable Long id
     ) {
         articleService.delete(id);

@@ -57,23 +57,25 @@ public class ArticleService {
     }
 
     public ArticleResponse create(ArticleCreateRequest request) {
+        // System.out.println(request.writerId());
         Article article = new Article(
-                request.writerId(),
-                request.boardId(),
+                request.author_id(),
+                request.board_id(),
                 request.title(),
-                request.description(),
+                request.content(),
                 LocalDateTime.now()
         );
 
         Article saved = articleRepository.insert(article);
         Member member = memberRepository.findById(saved.getWriterId());
         Board board = boardRepository.findById(article.getBoardId());
-        return ArticleResponse.of(saved, member, board);
+        return ArticleResponse.of(article, member, board);
     }
 
     public ArticleResponse update(Long id, ArticleUpdateRequest request) {
         Article article = articleRepository.findById(id);
-        article.update(request.boardId(), request.title(), request.description());
+        article.setModifiedDate(LocalDateTime.now());
+        article.update(request.board_id(), request.title(), request.content(), LocalDateTime.now().toString());
         Article updated = articleRepository.update(id, article);
         Member member = memberRepository.findById(updated.getWriterId());
         Board board = boardRepository.findById(article.getBoardId());

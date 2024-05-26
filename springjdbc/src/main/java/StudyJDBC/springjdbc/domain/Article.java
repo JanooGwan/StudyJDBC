@@ -34,14 +34,11 @@ public class Article {
     }
 
 
-    public Article() {
-    }
-
-    public void update(Long boardId, String title, String description) {
+    public void update(Long boardId, String title, String content, String modifiedDate) {
         this.boardId = boardId;
         this.title = title;
         this.content = content;
-        this.modifiedDate = LocalDateTime.now();
+        this.modifiedDate = LocalDateTime.parse(modifiedDate);
     }
 
     public void setId(Long id) {
@@ -68,16 +65,13 @@ public class Article {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String description) {
-        this.content=description;
+    public void setContent(String content) {
+        this.content=content;
     }
 
     public LocalDateTime getCreatedDate() {

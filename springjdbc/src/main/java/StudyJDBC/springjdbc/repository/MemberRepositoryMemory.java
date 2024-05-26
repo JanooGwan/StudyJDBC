@@ -1,7 +1,10 @@
 package StudyJDBC.springjdbc.repository;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +17,8 @@ public class MemberRepositoryMemory implements MemberRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    private static final Map<Long, Member> members = new HashMap<>();
+    private static final AtomicLong autoincrement = new AtomicLong(1);
     private final RowMapper<Member> memberRowMapper = (rs, rowNum) -> new Member(
             rs.getLong("id"),
             rs.getString("name"),
@@ -34,8 +39,7 @@ public class MemberRepositoryMemory implements MemberRepository {
 
     @Override
     public Member findById(Long id) {
-        String sql = "SELECT * FROM member WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, memberRowMapper, id);
+        return members.getOrDefault(id, null);
     }
 
 

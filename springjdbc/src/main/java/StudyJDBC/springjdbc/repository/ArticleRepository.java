@@ -9,7 +9,7 @@ import StudyJDBC.springjdbc.domain.Member;
 
 public interface ArticleRepository {
     List<Article> findAll();
-    Article findById(Long id);
+    public Article findById(Long id);
     Optional<Article> findByIdOp(Long id);
     List<Article> findBoard(Long id);
     Optional<Article> findByBoardIdOp(Long id);

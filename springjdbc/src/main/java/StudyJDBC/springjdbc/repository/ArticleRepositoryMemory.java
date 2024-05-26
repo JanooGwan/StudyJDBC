@@ -8,13 +8,17 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
 
 @Repository
 public class ArticleRepositoryMemory implements ArticleRepository {
+
+    private static final Map<Long, Article> articles = new HashMap<>();
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -27,11 +31,15 @@ public class ArticleRepositoryMemory implements ArticleRepository {
             rs.getObject("created_date", LocalDateTime.class)
     );
 
+
     public ArticleRepositoryMemory(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Article findById(Long id){return findById(id);}
+    public Article findById(Long id) {
+        Article results = jdbcTemplate.queryForObject("SELECT * FROM article WHERE id = ?", articleRowMapper, id);
+        return results;
+    }
 
     @Override
     public List<Article> findAll() {
@@ -56,25 +64,22 @@ public class ArticleRepositoryMemory implements ArticleRepository {
         return results.stream().findAny();
     }
 
-
     @Override
     public Article update(Long id, Article article) {
-        return null;
+        String sql = "UPDATE article SET board_id = ?, title = ?, content = ? WHERE id = ?";
+        // System.out.println(article.getContent());
+        jdbcTemplate.update(sql, article.getBoardId(), article.getTitle(), article.getContent(), article.getId());
+        return article;
     }
 
 
     public Article insert(Article article) {
         jdbcTemplate.update("INSERT INTO article (author_id, board_id, title, content) VALUES (?, ?, ?, ?)",
                 article.getWriterId(), article.getBoardId(), article.getTitle(), article.getContent());
-        System.out.println(article.getWriterId());
         return article;
     }
 
 
-    public void update(Article article) {
-        String sql = "UPDATE article SET title = ?, content = ? WHERE id = ?";
-        jdbcTemplate.update(sql, article.getTitle(), article.getContent(), article.getId());
-    }
 
     @Override
     public void deleteById(Long id) {

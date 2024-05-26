@@ -1,6 +1,9 @@
 package StudyJDBC.springjdbc.repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,6 +15,9 @@ import StudyJDBC.springjdbc.domain.Board;
 @Repository
 public class BoardRepositoryMemory implements BoardRepository {
     private final JdbcTemplate jdbcTemplate;
+
+    private static final Map<Long, Board> boards = new HashMap<>();
+    private static final AtomicLong autoincrement = new AtomicLong(1);
 
     private final RowMapper<Board> boardRowMapper = (rs, rowNum) -> new Board(
             rs.getLong("id"),
@@ -25,20 +31,22 @@ public class BoardRepositoryMemory implements BoardRepository {
 
     @Override
     public List<Board> findAll() {
-        String sql = "SELECT * FROM board";
-        return jdbcTemplate.query(sql, boardRowMapper);
+        return boards.entrySet().stream()
+                .map(it -> {
+                    Board board = it.getValue();
+                    board.setId(it.getKey());
+                    return board;
+                }).toList();
     }
 
     @Override
     public Board findById(Long id) {
-        String sql = "SELECT * FROM board WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, boardRowMapper, id);
+        return boards.getOrDefault(id, null);
     }
 
 
-    public void save(Board board) {
-        String sql = "INSERT INTO board (name) VALUES (?, ?)";
-        jdbcTemplate.update(sql, board.getName());
+    public void insert(Board board) {
+        boards.put(autoincrement.getAndIncrement(), board);
     }
 
 }
