@@ -35,7 +35,6 @@ public class ArticleController {
     public ResponseEntity<ArticleResponse> createArticle(
             @RequestBody ArticleCreateRequest request
     ) {
-        // System.out.println(request);
         ArticleResponse response = articleService.create(request);
         return ResponseEntity.ok(response);
     }

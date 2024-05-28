@@ -27,17 +27,8 @@ public class ArticleService {
         this.boardRepository = boardRepository;
     }
 
-    public List<ArticleResponse> getAll() {
-        List<Article> articles = articleRepository.findAll();
-        return articles.stream()
-                .map(article -> {
-                    Member member = memberRepository.findById(article.getWriterId());
-                    Board board = boardRepository.findById(article.getBoardId());
-                    return ArticleResponse.of(article, member, board);
-                }).toList();
-    }
 
-    public List<ArticleResponse> getBoard(Long id) { // 의도와 다르게 짜여진 잘못된 메소드
+    public List<ArticleResponse> getBoard(Long id) {
         List<Article> articles = articleRepository.findBoard(id);
         return articles.stream()
                 .map(article -> {
